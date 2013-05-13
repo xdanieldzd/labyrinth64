@@ -29,8 +29,8 @@ namespace Labyrinth
             Application.Idle += new EventHandler(Application_Idle);
 
             //testing!
-            ModelImport.Common.Vector4 tmp = new ModelImport.Common.Vector4(0.5, 0.5, 0.5, 0.5);
-            obj = new ModelImport.WavefrontObj(@"E:\oot-obj\crash_maps\water\testobj\water-test.obj");
+         //   ModelImport.Common.Vector4 tmp = new ModelImport.Common.Vector4(0.5, 0.5, 0.5, 0.5);
+          //  obj = new ModelImport.WavefrontObj(@"C:\Users\haddocdx\Downloads\Death_Mountain_2.obj");
         }
 
         private void Application_Idle(object sender, EventArgs e)
@@ -62,5 +62,42 @@ namespace Labyrinth
 
             ((GLControl)sender).SwapBuffers();
         }
+
+
+        // File -> New opens this form which displays the new map types
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewProjectForm newProjForm = new NewProjectForm();
+            newProjForm.createform();
+            int projectType = newProjForm.returnProjectType;
+            if (projectType == 0)
+                createNewSingleRoomScene();
+            else if (projectType == 1)
+                createNewMultiRoomScene();
+            else if (projectType == 2)
+                createNewBlankProject();
+            else
+                MessageBox.Show("What happened? ProjectType should never be " + projectType.ToString(), "Caught an error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }//end method
+
+
+        private void createNewSingleRoomScene()
+        {
+            
+        }//end method
+
+
+        private void createNewMultiRoomScene()
+        {
+            
+        }//end method
+
+
+        private void createNewBlankProject()
+        {
+            
+        }//end method
+
+
     }
 }
