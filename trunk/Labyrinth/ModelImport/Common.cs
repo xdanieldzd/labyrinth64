@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace Labyrinth.ModelImport
 {
@@ -233,6 +234,7 @@ namespace Labyrinth.ModelImport
             public string Name { get; set; }
             public string TextureMap { get; set; }
             public Color4 Color { get; set; }
+            public Bitmap TextureMapImage { get; set; }
 
             public Material()
             {
