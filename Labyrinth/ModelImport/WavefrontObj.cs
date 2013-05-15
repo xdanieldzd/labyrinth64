@@ -39,11 +39,6 @@ namespace Labyrinth.ModelImport
             Open(fn);
         }
 
-        public Common.Model GetModel()
-        {
-            return Model;
-        }
-
         public void Open(string fn)
         {
             fn = Path.GetFullPath(fn);
@@ -164,13 +159,21 @@ namespace Labyrinth.ModelImport
                                     VLocal[1] = VIndex[i - 1]; TLocal[1] = TIndex[i - 1]; NLocal[1] = NIndex[i - 1]; CLocal[1] = CIndex[i - 1];
                                     VLocal[2] = VIndex[i]; TLocal[2] = TIndex[i]; NLocal[2] = NIndex[i]; CLocal[2] = CIndex[i];
 
-                                    //OUT OF RANGE EXCEPTION! FIXME!
-                                    group.Polygons.Add(
-                                        new Common.Polygon(
-                                            new Common.Vertex(vertpos[VIndex[0]], texcoords[TIndex[0]], colors[CIndex[0]], normals[NIndex[0]]),
-                                            new Common.Vertex(vertpos[VIndex[1]], texcoords[TIndex[1]], colors[CIndex[1]], normals[NIndex[1]]),
-                                            new Common.Vertex(vertpos[VIndex[2]], texcoords[TIndex[2]], colors[CIndex[1]], normals[NIndex[2]]),
-                                            new Common.Material() { Name = curmatname }));
+                                    Common.Vertex[] curverts = new Common.Vertex[3];
+
+                                    for (int j = 0; j < curverts.Length; j++)
+                                    {
+                                        Common.Vector3 pos = (VIndex[j] == -1 ? Common.Vector3.Zero : vertpos[VIndex[j]]);
+                                        Common.Vector2 tc = (TIndex[j] == -1 ? Common.Vector2.Zero : texcoords[TIndex[j]]);
+                                        Common.Color4 vc = (CIndex[j] == -1 ? new Common.Color4(0.2, 0.2, 0.2, 1.0) : colors[CIndex[j]]);
+                                        Common.Vector3 norm = (NIndex[j] == -1 ? Common.Vector3.Zero : normals[NIndex[j]]);
+
+                                        //if (j == 1) vc = new Common.Color4(1.0, 0.2, 0.2, 0.2); //force something for testing
+
+                                        curverts[j] = new Common.Vertex(pos, tc, vc, norm);
+                                    }
+
+                                    group.Polygons.Add(new Common.Polygon(curverts[0], curverts[1], curverts[2], new Common.Material() { Name = curmatname }));
                                 }
                             }
                         }
@@ -320,6 +323,12 @@ namespace Labyrinth.ModelImport
 
                 /* Transparency is set to something other than 0, use transparency */
                 if (tr != 0.0) mat.Color.A = tr;
+
+                if (mat.TextureMap != string.Empty)
+                {
+                    /* Load texture map to Bitmap */
+                    mat.TextureMapImage = new System.Drawing.Bitmap(mat.TextureMap);
+                }
 
                 Model.Materials.Add(mat);
                 matopen = false;

@@ -35,6 +35,9 @@
             // 
             // newProjectListType
             // 
+            this.newProjectListType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.newProjectListType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.newProjectListType.FormattingEnabled = true;
             this.newProjectListType.Items.AddRange(new object[] {
             "Single Room Scene",
@@ -48,16 +51,19 @@
             // 
             // labelNewFormDescription
             // 
-            this.labelNewFormDescription.AutoSize = true;
-            this.labelNewFormDescription.Location = new System.Drawing.Point(11, 64);
+            this.labelNewFormDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelNewFormDescription.Location = new System.Drawing.Point(12, 36);
             this.labelNewFormDescription.Name = "labelNewFormDescription";
-            this.labelNewFormDescription.Size = new System.Drawing.Size(28, 13);
+            this.labelNewFormDescription.Size = new System.Drawing.Size(260, 92);
             this.labelNewFormDescription.TabIndex = 1;
             this.labelNewFormDescription.Text = "       ";
             // 
             // buttonSelectTypeOfNewProject
             // 
-            this.buttonSelectTypeOfNewProject.Location = new System.Drawing.Point(99, 131);
+            this.buttonSelectTypeOfNewProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSelectTypeOfNewProject.Location = new System.Drawing.Point(197, 131);
             this.buttonSelectTypeOfNewProject.Name = "buttonSelectTypeOfNewProject";
             this.buttonSelectTypeOfNewProject.Size = new System.Drawing.Size(75, 23);
             this.buttonSelectTypeOfNewProject.TabIndex = 2;
@@ -78,7 +84,6 @@
             this.Name = "NewProjectForm";
             this.Text = "Select the Type of Project";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
