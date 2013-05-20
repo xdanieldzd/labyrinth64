@@ -69,7 +69,7 @@
             this.glControl1.Name = "glControl1";
             this.glControl1.Size = new System.Drawing.Size(724, 523);
             this.glControl1.TabIndex = 0;
-            this.glControl1.VSync = true;
+            this.glControl1.VSync = false;
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
             this.glControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl1_Paint);
             this.glControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyDown);

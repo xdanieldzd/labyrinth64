@@ -12,6 +12,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 using Labyrinth.ModelImport;
+using Labyrinth.OpenGLHelpers;
 
 namespace Labyrinth
 {
@@ -20,10 +21,13 @@ namespace Labyrinth
         /* OpenGL related variables */
         bool GLReady;
         bool[] KeysDown = new bool[256];
-        OpenGLHelpers.Camera Cam;
-        OpenGLHelpers.TextureCache TexCache;
+        Camera Cam;
+        TextureCache TexCache;
+        FPSMonitor FPSMonitor;
+        QuickFontWrapper GLText;
 
         //TEMPORARY for testing
+        int fragprog;
         ModelImport.WavefrontObj obj;
 
         public MainForm()
@@ -47,9 +51,33 @@ namespace Labyrinth
         {
             //ALL TEMPORARY until more classes and GUI is working
             //obj = new WavefrontObj(@"C:\Users\haddocdx\Downloads\Death_Mountain_2.obj");
-            //obj = new WavefrontObj(@"E:\oot-obj\plane\plane.obj");
-            obj = new WavefrontObj(@"E:\oot-obj\crash_maps\water\water.obj");
+            //obj = new WavefrontObj(@"E:\oot-obj\crash_maps\water\water.obj");
+            obj = new WavefrontObj(@"C:\Users\Daniel\OoT Obj Testing\plane_grouped_modified-VTXHACK.obj");
             foreach (Common.Material mat in obj.Model.Materials) TexCache.Load(System.IO.Path.GetFileName(mat.TextureMap), mat.TextureMapImage);
+
+            // shader test
+            string pstring =
+                "!!ARBfp1.0\n" +
+                "\n" +
+                "TEMP Tex0; TEMP CACombined;\n" +
+                "\n" +
+                "PARAM ColorMaterial = program.env[0];\n" +
+                "ATTRIB ColorVertex = fragment.color;\n" +
+                "\n" +
+                "TEX Tex0, fragment.texcoord[0], texture[0], 2D;\n" +
+                "\n" +
+                "OUTPUT Output = result.color;\n" +
+                "\n";
+
+            pstring += "MUL CACombined, ColorMaterial, ColorVertex;\n";
+            pstring += "MUL Output, Tex0, CACombined;\n";
+            pstring += "END\n";
+
+            byte[] bytes = Encoding.ASCII.GetBytes(pstring);
+            IntPtr ptr = System.Runtime.InteropServices.Marshal.UnsafeAddrOfPinnedArrayElement(bytes, 0);
+            GL.Arb.GenProgram(1, out fragprog);
+            GL.Arb.BindProgram(AssemblyProgramTargetArb.FragmentProgram, fragprog);
+            GL.Arb.ProgramString(AssemblyProgramTargetArb.FragmentProgram, ArbVertexProgram.ProgramFormatAsciiArb, bytes.Length, ptr);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -62,9 +90,13 @@ namespace Labyrinth
             /* OpenGL stuff */
             OpenGLHelpers.Initialization.SetDefaults();
 
+            /* QuickFont stuff */
+            GLText = new QuickFontWrapper(new Font("Verdana", 10.0f, FontStyle.Bold));
+
             /* Program stuff */
-            Cam = new OpenGLHelpers.Camera();
-            TexCache = new OpenGLHelpers.TextureCache();
+            Cam = new Camera();
+            TexCache = new TextureCache();
+            FPSMonitor = new FPSMonitor();
 
             /* Ready */
             GLReady = true;
@@ -74,11 +106,25 @@ namespace Labyrinth
         {
             if (!GLReady) return;
 
+            RenderInit(((GLControl)sender).Width, ((GLControl)sender).Height);
+            RenderScene();
+            RenderText();
+
+            ((GLControl)sender).SwapBuffers();
+        }
+
+        private void RenderInit(int width, int height)
+        {
+            FPSMonitor.Update();
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            OpenGLHelpers.Initialization.SetViewport(((GLControl)sender).Width, ((GLControl)sender).Height);
+            OpenGLHelpers.Initialization.SetViewport(width, height);
             Cam.Position();
             GL.Scale(0.02, 0.02, 0.02);
+        }
 
+        private void RenderScene()
+        {
             // THESE NOTES ARE TEMPORARY
             //rendering test; very VERY barebones
             //---NOTE: write down lighting/material/color setup somewhere, pretty good for the most part, HOWEVER:
@@ -88,15 +134,21 @@ namespace Labyrinth
 
             GL.PushAttrib(AttribMask.AllAttribBits);
             GL.Enable(EnableCap.ColorMaterial);
+#if NOSHADERS
             GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.Ambient);        //ambient color from GL.Color, everything else from GL.Material
+#endif
             int glid;
             foreach (Common.Group g in obj.Model.Groups)
             {
                 foreach (Common.Polygon p in g.Polygons)
                 {
+#if NOSHADERS
                     // material tint as diffuse
                     GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, new float[] { (float)p.Material.Color.R, (float)p.Material.Color.G, (float)p.Material.Color.B, (float)p.Material.Color.A });
-
+#else
+                    GL.Enable((EnableCap)All.FragmentProgram);
+                    GL.Arb.ProgramEnvParameter4(AssemblyProgramTargetArb.FragmentProgram, 0, p.Material.Color.R, p.Material.Color.G, p.Material.Color.B, p.Material.Color.A);
+#endif
                     if (p.Material.TextureMap != string.Empty && (glid = TexCache[System.IO.Path.GetFileName(p.Material.TextureMap)]) != -1)
                     {
                         GL.Enable(EnableCap.Texture2D);
@@ -119,8 +171,13 @@ namespace Labyrinth
                 }
             }
             GL.PopAttrib();
+        }
 
-            ((GLControl)sender).SwapBuffers();
+        private void RenderText()
+        {
+            GLText.Begin();
+            GLText.Print(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.00} FPS", FPSMonitor.Value), new Vector2d(10.0, 10.0));
+            GLText.End();
         }
 
         // File -> New opens this form which displays the new map types

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Labyrinth", "Labyrinth\Labyrinth.csproj", "{B926693F-8228-49BE-A9E0-317A62F1BC24}"
 EndProject
 Global

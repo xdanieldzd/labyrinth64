@@ -165,10 +165,11 @@ namespace Labyrinth.ModelImport
                                     {
                                         Common.Vector3 pos = (VIndex[j] == -1 ? Common.Vector3.Zero : vertpos[VIndex[j]]);
                                         Common.Vector2 tc = (TIndex[j] == -1 ? Common.Vector2.Zero : texcoords[TIndex[j]]);
-                                        Common.Color4 vc = (CIndex[j] == -1 ? new Common.Color4(0.2, 0.2, 0.2, 1.0) : colors[CIndex[j]]);
+                                        Common.Color4 vc = (CIndex[j] == -1 ? new Common.Color4(0.5, 0.5, 0.5, 1.0) : colors[CIndex[j]]);
                                         Common.Vector3 norm = (NIndex[j] == -1 ? Common.Vector3.Zero : normals[NIndex[j]]);
 
-                                        //if (j == 1) vc = new Common.Color4(1.0, 0.2, 0.2, 0.2); //force something for testing
+                                        //if (j == 1) vc = new Common.Color4(1.0, 0.0, 0.0, 0.1); //force something for testing
+                                        //if (j == 1) vc.A = 0.1;
 
                                         curverts[j] = new Common.Vertex(pos, tc, vc, norm);
                                     }
@@ -326,8 +327,16 @@ namespace Labyrinth.ModelImport
 
                 if (mat.TextureMap != string.Empty)
                 {
-                    /* Load texture map to Bitmap */
-                    mat.TextureMapImage = new System.Drawing.Bitmap(mat.TextureMap);
+                    if (ValidImageTypes.IndexOf(Path.GetExtension(mat.TextureMap).ToLowerInvariant()) != -1)
+                    {
+                        /* Load texture map to Bitmap */
+                        mat.TextureMapImage = new System.Drawing.Bitmap(mat.TextureMap);
+                    }
+                    else
+                    {
+                        /* Image format not supported */
+                        throw new Exception(string.Format("Format of image {0} is not supported", Path.GetFileName(mat.TextureMap)));
+                    }
                 }
 
                 Model.Materials.Add(mat);
