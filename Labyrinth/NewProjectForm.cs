@@ -14,7 +14,7 @@ namespace Labyrinth
         public NewProjectForm()
         {
             InitializeComponent();
-        }
+        }//end constructor
 
 
         public void createform()
@@ -37,15 +37,13 @@ namespace Labyrinth
 
         private void buttonSelectTypeOfNewProject_Click(object sender, EventArgs e)
         {
-
-
             returnProjectType = newProjectListType.SelectedIndex;
             this.Dispose();
-        }
+        }//end method
 
 
-        public int returnProjectType { get; set; }
+        public int returnProjectType { get; set; }//end method
 
 
-    }
-}
+    }//end class
+}//end namespace

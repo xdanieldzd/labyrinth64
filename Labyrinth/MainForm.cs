@@ -36,7 +36,7 @@ namespace Labyrinth
             this.Text = Application.ProductName;
 
             Application.Idle += new EventHandler(Application_Idle);
-        }
+        }//end constructor
 
         private void Application_Idle(object sender, EventArgs e)
         {
@@ -44,8 +44,8 @@ namespace Labyrinth
             {
                 Cam.KeyUpdate(KeysDown);
                 glControl1.Invalidate();
-            }
-        }
+            }//end if
+        }//end method
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -78,12 +78,12 @@ namespace Labyrinth
             GL.Arb.GenProgram(1, out fragprog);
             GL.Arb.BindProgram(AssemblyProgramTargetArb.FragmentProgram, fragprog);
             GL.Arb.ProgramString(AssemblyProgramTargetArb.FragmentProgram, ArbVertexProgram.ProgramFormatAsciiArb, bytes.Length, ptr);
-        }
+        }//end method
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             TexCache.Dispose();
-        }
+        }//end method
 
         private void glControl1_Load(object sender, EventArgs e)
         {
@@ -100,7 +100,7 @@ namespace Labyrinth
 
             /* Ready */
             GLReady = true;
-        }
+        }//end method
 
         private void glControl1_Paint(object sender, PaintEventArgs e)
         {
@@ -111,7 +111,7 @@ namespace Labyrinth
             RenderText();
 
             ((GLControl)sender).SwapBuffers();
-        }
+        }//end method
 
         private void RenderInit(int width, int height)
         {
@@ -121,7 +121,7 @@ namespace Labyrinth
             OpenGLHelpers.Initialization.SetViewport(width, height);
             Cam.Position();
             GL.Scale(0.02, 0.02, 0.02);
-        }
+        }//end method
 
         private void RenderScene()
         {
@@ -134,30 +134,34 @@ namespace Labyrinth
 
             GL.PushAttrib(AttribMask.AllAttribBits);
             GL.Enable(EnableCap.ColorMaterial);
-#if NOSHADERS
-            GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.Ambient);        //ambient color from GL.Color, everything else from GL.Material
-#endif
+
+            #if NOSHADERS
+                GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.Ambient);        //ambient color from GL.Color, everything else from GL.Material
+            #endif
+
             int glid;
             foreach (Common.Group g in obj.Model.Groups)
             {
                 foreach (Common.Polygon p in g.Polygons)
                 {
-#if NOSHADERS
-                    // material tint as diffuse
-                    GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, new float[] { (float)p.Material.Color.R, (float)p.Material.Color.G, (float)p.Material.Color.B, (float)p.Material.Color.A });
-#else
-                    GL.Enable((EnableCap)All.FragmentProgram);
-                    GL.Arb.ProgramEnvParameter4(AssemblyProgramTargetArb.FragmentProgram, 0, p.Material.Color.R, p.Material.Color.G, p.Material.Color.B, p.Material.Color.A);
-#endif
+                    #if NOSHADERS
+                        // material tint as diffuse
+                        GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, new float[] { (float)p.Material.Color.R, (float)p.Material.Color.G, (float)p.Material.Color.B, (float)p.Material.Color.A });
+                    #else
+                        GL.Enable((EnableCap)All.FragmentProgram);
+                        GL.Arb.ProgramEnvParameter4(AssemblyProgramTargetArb.FragmentProgram, 0, p.Material.Color.R, p.Material.Color.G, p.Material.Color.B, p.Material.Color.A);
+                    #endif
+
                     if (p.Material.TextureMap != string.Empty && (glid = TexCache[System.IO.Path.GetFileName(p.Material.TextureMap)]) != -1)
                     {
                         GL.Enable(EnableCap.Texture2D);
                         GL.BindTexture(TextureTarget.Texture2D, glid);
-                    }
+                    }//end if
                     else
                         GL.Disable(EnableCap.Texture2D);
 
                     GL.Begin(BeginMode.Triangles);
+
                     foreach (Common.Vertex v in p.Vertices)
                     {
                         // vertex color as ambient
@@ -166,19 +170,19 @@ namespace Labyrinth
                         GL.Normal3(v.Normals.X, v.Normals.Y, v.Normals.Z);
                         GL.TexCoord2(v.TextureCoordinates.X, v.TextureCoordinates.Y);
                         GL.Vertex3(v.Position.X, v.Position.Y, v.Position.Z);
-                    }
+                    }//end common.vertex foreach
                     GL.End();
-                }
-            }
+                }//end common.polygon foreach
+            }//end common.group foreach
             GL.PopAttrib();
-        }
+        }//end method
 
         private void RenderText()
         {
             GLText.Begin();
             GLText.Print(string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.00} FPS", FPSMonitor.Value), new Vector2d(10.0, 10.0));
             GLText.End();
-        }
+        }//end method
 
         // File -> New opens this form which displays the new map types
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -216,9 +220,7 @@ namespace Labyrinth
             Cam.ButtonsDown |= e.Button;
 
             if (Convert.ToBoolean(Cam.ButtonsDown & System.Windows.Forms.MouseButtons.Left) == true)
-            {
                 Cam.MouseCenter(new Vector2d(e.X, e.Y));
-            }
         }//end method
 
         private void glControl1_MouseUp(object sender, MouseEventArgs e)
@@ -240,5 +242,5 @@ namespace Labyrinth
         {
             KeysDown[e.KeyValue] = false;
         }//end method
-    }
-}
+    }//end class
+}//end constructor
