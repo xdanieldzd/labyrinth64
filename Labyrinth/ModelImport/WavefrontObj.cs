@@ -31,260 +31,273 @@ namespace Labyrinth.ModelImport
             normals = new List<Common.Vector3>();
             texcoords = new List<Common.Vector2>();
             colors = new List<Common.Color4>();
-        }
+        }//end constructor
 
         public WavefrontObj(string fn)
             : this()
         {
-            Open(fn);
-        }
+                Open(fn);
+        }//end constructor
 
         public void Open(string fn)
         {
             fn = Path.GetFullPath(fn);
 
-            StreamReader sr = File.OpenText(fn);
-
-            Common.Group group = new Common.Group();
-            groupopen = false;
-
-            string line = string.Empty;
-            string curmatname = string.Empty;
-
-            while ((line = sr.ReadLine()) != null)
+            try
             {
-                line = line.TrimStart(TokenSeperator);
-                if (line == string.Empty) continue;
+                StreamReader sr = File.OpenText(fn);
 
-                string[] tokenized = line.Split(TokenSeperator, StringSplitOptions.RemoveEmptyEntries);
 
-                switch (tokenized[0])
+                Common.Group group = new Common.Group();
+                groupopen = false;
+
+                string line = string.Empty;
+                string curmatname = string.Empty;
+
+                while ((line = sr.ReadLine()) != null)
                 {
-                    case "#":
-                        /* Comment */
-                        break;
+                    line = line.TrimStart(TokenSeperator);
+                    if (line == string.Empty) continue;
 
-                    case "o":
-                        /* Object */
-                        Model.Name = line.Substring(line.IndexOf(tokenized[1]));
-                        break;
+                    string[] tokenized = line.Split(TokenSeperator, StringSplitOptions.RemoveEmptyEntries);
 
-                    case "g":
-                        /* Group */
-                        if (groupopen) TryAddGroup(group);
+                    switch (tokenized[0])
+                    {
+                        case "#":
+                            /* Comment */
+                            break;
 
-                        groupopen = true;
-                        group = new Common.Group();
-                        group.Name = line.Substring(line.IndexOf(tokenized[1]));
-                        break;
+                        case "o":
+                            /* Object */
+                            Model.Name = line.Substring(line.IndexOf(tokenized[1]));
+                            break;
 
-                    case "mtllib":
-                        /* Material lib reference */
-                        OpenMtl((mtlpath = CreateFullPath(fn, line.Substring(line.IndexOf(tokenized[1])))));
-                        break;
+                        case "g":
+                            /* Group */
+                            if (groupopen) TryAddGroup(group);
 
-                    case "v":
-                        /* Vertex */
-                        vertpos.Add(new Common.Vector4(
-                            double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            (tokenized.Length == 5 ? double.Parse(tokenized[4], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture) : 0.0)));
-                        break;
+                            groupopen = true;
+                            group = new Common.Group();
+                            group.Name = line.Substring(line.IndexOf(tokenized[1]));
+                            break;
 
-                    case "vt":
-                        /* Texture coordinates */
-                        texcoords.Add(new Common.Vector3(
-                            double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            -double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            (tokenized.Length == 4 ? double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture) : 0.0)));
-                        break;
+                        case "mtllib":
+                            /* Material lib reference */
+                            OpenMtl((mtlpath = CreateFullPath(fn, line.Substring(line.IndexOf(tokenized[1])))));
+                            break;
 
-                    case "vn":
-                        /* Normals */
-                        normals.Add(new Common.Vector3(
-                            double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture)));
-                        break;
+                        case "v":
+                            /* Vertex */
+                            vertpos.Add(new Common.Vector4(
+                                double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                (tokenized.Length == 5 ? double.Parse(tokenized[4], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture) : 0.0)));
+                            break;
 
-                    case "vc":
-                        /* Colors */
-                        colors.Add(new Common.Color4(
-                            double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            (tokenized.Length == 5 ? double.Parse(tokenized[4], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture) : 0.0)));
-                        break;
+                        case "vt":
+                            /* Texture coordinates */
+                            texcoords.Add(new Common.Vector3(
+                                double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                -double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                (tokenized.Length == 4 ? double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture) : 0.0)));
+                            break;
 
-                    case "usemtl":
-                        /* Material to use */
-                        curmatname = line.Substring(line.IndexOf(tokenized[1]));
-                        break;
+                        case "vn":
+                            /* Normals */
+                            normals.Add(new Common.Vector3(
+                                double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture)));
+                            break;
 
-                    case "f":
-                        /* Faces - http://z64.spinout182.com/index.php?topic=320.msg2229#msg2229 */
-                        int[] VIndex = new int[tokenized.Length - 1];
-                        int[] TIndex = new int[tokenized.Length - 1];
-                        int[] NIndex = new int[tokenized.Length - 1];
-                        int[] CIndex = new int[tokenized.Length - 1];
+                        case "vc":
+                            /* Colors */
+                            colors.Add(new Common.Color4(
+                                double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                (tokenized.Length == 5 ? double.Parse(tokenized[4], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture) : 0.0)));
+                            break;
 
-                        /* Triangulate face */
-                        for (int i = 0; i < tokenized.Length - 1; i++)
-                        {
-                            string[] TokenizedVals = tokenized[i + 1].Split(TokenValSeperator);
-                            int[] VLocal = new int[3];
-                            int[] TLocal = new int[3];
-                            int[] NLocal = new int[3];
-                            int[] CLocal = new int[3];
+                        case "usemtl":
+                            /* Material to use */
+                            curmatname = line.Substring(line.IndexOf(tokenized[1]));
+                            break;
 
-                            int.TryParse(TokenizedVals[0], out VIndex[i]);
-                            int.TryParse(TokenizedVals[1], out TIndex[i]);
-                            if (TokenizedVals.Length >= 3)
-                                int.TryParse(TokenizedVals[2], out NIndex[i]);
-                            if (TokenizedVals.Length >= 4)
-                                int.TryParse(TokenizedVals[3], out CIndex[i]);
+                        case "f":
+                            /* Faces - http://z64.spinout182.com/index.php?topic=320.msg2229#msg2229 */
+                            int[] VIndex = new int[tokenized.Length - 1];
+                            int[] TIndex = new int[tokenized.Length - 1];
+                            int[] NIndex = new int[tokenized.Length - 1];
+                            int[] CIndex = new int[tokenized.Length - 1];
 
-                            VIndex[i] -= 1;
-                            TIndex[i] -= 1;
-                            NIndex[i] -= 1;
-                            CIndex[i] -= 1;
-
-                            /* Last vertex of triangle, or index to next point in the face (e.g. quad) */
-                            if (i >= 2)
+                            /* Triangulate face */
+                            for (int i = 0; i < tokenized.Length - 1; i++)
                             {
-                                if (VIndex[0 + (i - 2)] != -1 && VIndex[1 + (i - 2)] != -1 && VIndex[2 + (i - 2)] != -1)
+                                string[] TokenizedVals = tokenized[i + 1].Split(TokenValSeperator);
+                                int[] VLocal = new int[3];
+                                int[] TLocal = new int[3];
+                                int[] NLocal = new int[3];
+                                int[] CLocal = new int[3];
+
+                                int.TryParse(TokenizedVals[0], out VIndex[i]);
+                                int.TryParse(TokenizedVals[1], out TIndex[i]);
+                                if (TokenizedVals.Length >= 3)
+                                    int.TryParse(TokenizedVals[2], out NIndex[i]);
+                                if (TokenizedVals.Length >= 4)
+                                    int.TryParse(TokenizedVals[3], out CIndex[i]);
+
+                                VIndex[i] -= 1;
+                                TIndex[i] -= 1;
+                                NIndex[i] -= 1;
+                                CIndex[i] -= 1;
+
+                                /* Last vertex of triangle, or index to next point in the face (e.g. quad) */
+                                if (i >= 2)
                                 {
-                                    VLocal[0] = VIndex[0]; TLocal[0] = TIndex[0]; NLocal[0] = NIndex[0]; CLocal[0] = CIndex[0];
-                                    VLocal[1] = VIndex[i - 1]; TLocal[1] = TIndex[i - 1]; NLocal[1] = NIndex[i - 1]; CLocal[1] = CIndex[i - 1];
-                                    VLocal[2] = VIndex[i]; TLocal[2] = TIndex[i]; NLocal[2] = NIndex[i]; CLocal[2] = CIndex[i];
-
-                                    Common.Vertex[] curverts = new Common.Vertex[3];
-
-                                    for (int j = 0; j < curverts.Length; j++)
+                                    if (VIndex[0 + (i - 2)] != -1 && VIndex[1 + (i - 2)] != -1 && VIndex[2 + (i - 2)] != -1)
                                     {
-                                        Common.Vector3 pos = (VIndex[j] == -1 ? Common.Vector3.Zero : vertpos[VIndex[j]]);
-                                        Common.Vector2 tc = (TIndex[j] == -1 ? Common.Vector2.Zero : texcoords[TIndex[j]]);
-                                        Common.Color4 vc = (CIndex[j] == -1 ? new Common.Color4(0.5, 0.5, 0.5, 1.0) : colors[CIndex[j]]);
-                                        Common.Vector3 norm = (NIndex[j] == -1 ? Common.Vector3.Zero : normals[NIndex[j]]);
+                                        VLocal[0] = VIndex[0]; TLocal[0] = TIndex[0]; NLocal[0] = NIndex[0]; CLocal[0] = CIndex[0];
+                                        VLocal[1] = VIndex[i - 1]; TLocal[1] = TIndex[i - 1]; NLocal[1] = NIndex[i - 1]; CLocal[1] = CIndex[i - 1];
+                                        VLocal[2] = VIndex[i]; TLocal[2] = TIndex[i]; NLocal[2] = NIndex[i]; CLocal[2] = CIndex[i];
 
-                                        //if (j == 1) vc = new Common.Color4(1.0, 0.0, 0.0, 0.1); //force something for testing
-                                        //if (j == 1) vc.A = 0.1;
+                                        Common.Vertex[] curverts = new Common.Vertex[3];
 
-                                        curverts[j] = new Common.Vertex(pos, tc, vc, norm);
-                                    }
+                                        for (int j = 0; j < curverts.Length; j++)
+                                        {
+                                            Common.Vector3 pos = (VIndex[j] == -1 ? Common.Vector3.Zero : vertpos[VIndex[j]]);
+                                            Common.Vector2 tc = (TIndex[j] == -1 ? Common.Vector2.Zero : texcoords[TIndex[j]]);
+                                            Common.Color4 vc = (CIndex[j] == -1 ? new Common.Color4(0.5, 0.5, 0.5, 1.0) : colors[CIndex[j]]);
+                                            Common.Vector3 norm = (NIndex[j] == -1 ? Common.Vector3.Zero : normals[NIndex[j]]);
 
-                                    group.Polygons.Add(new Common.Polygon(curverts[0], curverts[1], curverts[2], new Common.Material() { Name = curmatname }));
-                                }
-                            }
-                        }
+                                            //if (j == 1) vc = new Common.Color4(1.0, 0.0, 0.0, 0.1); //force something for testing
+                                            //if (j == 1) vc.A = 0.1;
 
-                        break;
-                }
-            }
+                                            curverts[j] = new Common.Vertex(pos, tc, vc, norm);
+                                        }//end for
 
-            TryAddGroup(group);
+                                        group.Polygons.Add(new Common.Polygon(curverts[0], curverts[1], curverts[2], new Common.Material() { Name = curmatname }));
+                                    }//end VIndex0 if
+                                }//end i >= 2 if
+                            }//end for
 
-            foreach (Common.Group g in Model.Groups)
-            {
-                foreach (Common.Polygon p in g.Polygons)
+                            break;
+                        }//end switch
+                    }//end while
+
+                TryAddGroup(group);
+
+                foreach (Common.Group g in Model.Groups)
                 {
-                    p.Material = Model.Materials.FirstOrDefault(x => x.Name == p.Material.Name);
-                }
-            }
+                    foreach (Common.Polygon p in g.Polygons)
+                        p.Material = Model.Materials.FirstOrDefault(x => x.Name == p.Material.Name);
+                }//end foreach
 
-            sr.Close();
-        }
+                sr.Close();
+            }//end try
+            catch (Exception e)
+            {
+                errorMessage = "Error opening WaveFontObj. Value " + fn + "\r\n" + "Error Message: " + e.Message;
+            }//end catch
+        }//end method
 
         private void OpenMtl(string fn)
         {
             fn = Path.GetFullPath(fn);
 
-            StreamReader sr = File.OpenText(fn);
-
-            Common.Material mat = new Common.Material();
-            matopen = false;
-            mapka = mapkd = string.Empty;
-            ka = kd = Common.Color4.Zero;
-            tr = 0.0;
-
-            string line = string.Empty;
-
-            while ((line = sr.ReadLine()) != null)
+            try
             {
-                line = line.TrimStart(TokenSeperator);
-                if (line == string.Empty) continue;
+                StreamReader sr = File.OpenText(fn);
 
-                string[] tokenized = line.Split(TokenSeperator, StringSplitOptions.RemoveEmptyEntries);
+                Common.Material mat = new Common.Material();
+                matopen = false;
+                mapka = mapkd = string.Empty;
+                ka = kd = Common.Color4.Zero;
+                tr = 0.0;
 
-                switch (tokenized[0])
+                string line = string.Empty;
+
+                while ((line = sr.ReadLine()) != null)
                 {
-                    case "#":
-                        /* Comment */
-                        break;
+                    line = line.TrimStart(TokenSeperator);
+                    if (line == string.Empty) continue;
 
-                    case "newmtl":
-                        /* New material */
-                        if (matopen) TryAddMaterial(mat);
+                    string[] tokenized = line.Split(TokenSeperator, StringSplitOptions.RemoveEmptyEntries);
 
-                        matopen = true;
-                        mat = new Common.Material();
-                        mat.Name = line.Substring(line.IndexOf(tokenized[1]));
-                        mapka = mapkd = string.Empty;
-                        ka = kd = Common.Color4.Zero;
-                        tr = 0.0;
-                        break;
+                    switch (tokenized[0])
+                    {
+                        case "#":
+                            /* Comment */
+                            break;
 
-                    case "Ka":
-                        /* Ambient color */
-                        ka = new Common.Color4(
-                            double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            1.0);
-                        break;
+                        case "newmtl":
+                            /* New material */
+                            if (matopen) TryAddMaterial(mat);
 
-                    case "Kd":
-                        /* Diffuse color */
-                        kd = new Common.Color4(
-                            double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
-                            1.0);
-                        break;
+                            matopen = true;
+                            mat = new Common.Material();
+                            mat.Name = line.Substring(line.IndexOf(tokenized[1]));
+                            mapka = mapkd = string.Empty;
+                            ka = kd = Common.Color4.Zero;
+                            tr = 0.0;
+                            break;
 
-                    case "Tr":
-                    case "d":
-                        /* Transparency */
-                        double nval = double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
-                        if (tr == 0.0) tr = nval;
-                        break;
+                        case "Ka":
+                            /* Ambient color */
+                            ka = new Common.Color4(
+                                double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                1.0);
+                            break;
 
-                    case "map_Ka":
-                    case "mapKa":
-                        /* Ambient texture map */
-                        mapka = CreateFullPath(fn, line.Substring(line.IndexOf(tokenized[1])));
-                        break;
+                        case "Kd":
+                            /* Diffuse color */
+                            kd = new Common.Color4(
+                                double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                double.Parse(tokenized[3], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture),
+                                1.0);
+                            break;
 
-                    case "map_Kd":
-                    case "mapKd":
-                        /* Diffuse texture map */
-                        mapkd = CreateFullPath(fn, line.Substring(line.IndexOf(tokenized[1])));
-                        break;
-                }
-            }
+                        case "Tr":
+                        case "d":
+                            /* Transparency */
+                            double nval = double.Parse(tokenized[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
+                            if (tr == 0.0) tr = nval;
+                            break;
 
-            TryAddMaterial(mat);
+                        case "map_Ka":
+                        case "mapKa":
+                            /* Ambient texture map */
+                            mapka = CreateFullPath(fn, line.Substring(line.IndexOf(tokenized[1])));
+                            break;
 
-            sr.Close();
-        }
+                        case "map_Kd":
+                        case "mapKd":
+                            /* Diffuse texture map */
+                            mapkd = CreateFullPath(fn, line.Substring(line.IndexOf(tokenized[1])));
+                            break;
+                    }//end switch
+                }//end while
+
+                TryAddMaterial(mat);
+
+                sr.Close();
+            }//end try
+            catch (Exception e)
+            {
+                errorMessage = "Error in OpenMtl. Value " + fn + "\r\n" + "Error Message: " + e.Message;
+            }//end catch
+        }//end method
 
         private string CreateFullPath(string p1, string p2)
         {
             string path = p2;
             if (!Path.IsPathRooted(path)) path = Path.Combine(Path.GetDirectoryName(p1), path);
             return Path.GetFullPath(path);
-        }
+        }//end method
 
         private void TryAddGroup(Common.Group group)
         {
@@ -292,56 +305,49 @@ namespace Labyrinth.ModelImport
             {
                 Model.Groups.Add(group);
                 groupopen = false;
-            }
-        }
+            }//end if
+        }//end method
 
         private void TryAddMaterial(Common.Material mat)
         {
             if (matopen)
             {
-                if (mapka != string.Empty)
+                if (mapka != string.Empty)  /* Ambient texture map is set, use ambient texture map & color */
                 {
-                    /* Ambient texture map is set, use ambient texture map & color */
                     mat.TextureMap = mapka;
                     mat.Color = ka;
-                }
-                else if (mapkd != string.Empty)
+                }//end if
+                else if (mapkd != string.Empty)  /* Diffuse texture map is set, use diffuse texture map & color */
                 {
-                    /* Diffuse texture map is set, use diffuse texture map & color */
                     mat.TextureMap = mapkd;
                     mat.Color = kd;
-                }
-                else if (ka != Common.Color4.Zero)
-                {
-                    /* Ambient color is set but no texture map, use ambient color */
+                }//end else if
+                else if (ka != Common.Color4.Zero)  /* Ambient color is set but no texture map, use ambient color */
                     mat.Color = ka;
-                }
-                else if (kd != Common.Color4.Zero)
-                {
-                    /* Diffuse color is set but no texture map, use diffuse color */
+                else if (kd != Common.Color4.Zero)   /* Diffuse color is set but no texture map, use diffuse color */
                     mat.Color = kd;
-                }
 
-                /* Transparency is set to something other than 0, use transparency */
-                if (tr != 0.0) mat.Color.A = tr;
+
+                if (tr != 0.0)   /* Transparency is set to something other than 0, use transparency */
+                    mat.Color.A = tr;
 
                 if (mat.TextureMap != string.Empty)
                 {
-                    if (ValidImageTypes.IndexOf(Path.GetExtension(mat.TextureMap).ToLowerInvariant()) != -1)
-                    {
-                        /* Load texture map to Bitmap */
+                    if (ValidImageTypes.IndexOf(Path.GetExtension(mat.TextureMap).ToLowerInvariant()) != -1)/* Load texture map to Bitmap */
                         mat.TextureMapImage = new System.Drawing.Bitmap(mat.TextureMap);
-                    }
-                    else
-                    {
-                        /* Image format not supported */
+                    else   /* Image format not supported */
                         throw new Exception(string.Format("Format of image {0} is not supported", Path.GetFileName(mat.TextureMap)));
-                    }
-                }
+                }//end if
 
                 Model.Materials.Add(mat);
                 matopen = false;
-            }
-        }
-    }
-}
+            }//end matopen if
+        }//end method
+
+
+        public string errorMessage { get; set; }//end method
+
+
+
+    }//end class
+}//end namespace

@@ -22,13 +22,13 @@ namespace Labyrinth.OpenGLHelpers
         {
             Pos = new Vector3d(0.0, 0.0, -15.0);
             Rot = new Vector3d(0.0, 0.0, 0.0);
-        }
+        }//end constructor
 
         public void MouseCenter(Vector2d NewMouseCoord)
         {
             MouseCoordOld = MouseCoord;
             MouseCoord = NewMouseCoord;
-        }
+        }//end method
 
         public void MouseMove(Vector2d NewMouseCoord)
         {
@@ -39,12 +39,12 @@ namespace Labyrinth.OpenGLHelpers
             {
                 Dx = (NewMouseCoord.X - MouseCoord.X) * Sensitivity;
                 Changed = true;
-            }
+            }//end if
             if (NewMouseCoord.Y != MouseCoord.Y)
             {
                 Dy = (NewMouseCoord.Y - MouseCoord.Y) * Sensitivity;
                 Changed = true;
-            }
+            }//end if
 
             if (Changed)
             {
@@ -52,12 +52,12 @@ namespace Labyrinth.OpenGLHelpers
                 {
                     Rot.Y += (NewMouseCoord.X - MouseCoord.X) * 0.225;
                     if (Rot.Y > 360.0) Rot.Y = 0.0;
-                }
+                }//end if
                 else
                 {
                     Rot.Y -= (MouseCoord.X - NewMouseCoord.X) * 0.225;
                     if (Rot.Y < -360.0) Rot.Y = 0.0;
-                }
+                }//end else
 
                 if (MouseCoord.Y < NewMouseCoord.Y)
                 {
@@ -65,19 +65,19 @@ namespace Labyrinth.OpenGLHelpers
                         Rot.X = 90.0;
                     else
                         Rot.X += (Dy / Sensitivity) * 0.225;
-                }
+                }//end if
                 else
                 {
                     if (Rot.X <= -90.0)
                         Rot.X = -90.0;
                     else
                         Rot.X += (Dy / Sensitivity) * 0.225;
-                }
+                }//end else
 
                 MouseCoordOld = MouseCoord;
                 MouseCoord = NewMouseCoord;
-            }
-        }
+            }//end changed if
+        }//end method
 
         public void KeyUpdate(bool[] KeysDown)
         {
@@ -91,43 +91,39 @@ namespace Labyrinth.OpenGLHelpers
             if (KeysDown[(char)Keys.W])
             {
                 if (Rot.X >= 90.0 || Rot.X <= -90.0)
-                {
                     Pos.Y += Math.Sin(RotXRad) * CameraCoeff * 2.0 * Modifier;
-                }
                 else
                 {
                     Pos.X -= Math.Sin(RotYRad) * CameraCoeff * 2.0 * Modifier;
                     Pos.Z += Math.Cos(RotYRad) * CameraCoeff * 2.0 * Modifier;
                     Pos.Y += Math.Sin(RotXRad) * CameraCoeff * 2.0 * Modifier;
-                }
-            }
+                }//end else
+            }//end if
 
             if (KeysDown[(char)Keys.S])
             {
                 if (Rot.X >= 90.0 || Rot.X <= -90.0)
-                {
                     Pos.Y -= Math.Sin(RotXRad) * CameraCoeff * 2.0 * Modifier;
-                }
                 else
                 {
                     Pos.X += Math.Sin(RotYRad) * CameraCoeff * 2.0 * Modifier;
                     Pos.Z -= Math.Cos(RotYRad) * CameraCoeff * 2.0 * Modifier;
                     Pos.Y -= Math.Sin(RotXRad) * CameraCoeff * 2.0 * Modifier;
-                }
-            }
+                }//end else
+            }//end if
 
             if (KeysDown[(char)Keys.A])
             {
                 Pos.X += Math.Cos(RotYRad) * CameraCoeff * 2.0 * Modifier;
                 Pos.Z += Math.Sin(RotYRad) * CameraCoeff * 2.0 * Modifier;
-            }
+            }//end if
 
             if (KeysDown[(char)Keys.D])
             {
                 Pos.X -= Math.Cos(RotYRad) * CameraCoeff * 2.0 * Modifier;
                 Pos.Z -= Math.Sin(RotYRad) * CameraCoeff * 2.0 * Modifier;
-            }
-        }
+            }//end if
+        }//end method
 
         public void Position()
         {
@@ -135,6 +131,6 @@ namespace Labyrinth.OpenGLHelpers
             GL.Rotate(Rot.Y, 0.0, 1.0, 0.0);
             GL.Rotate(Rot.Z, 0.0, 0.0, 1.0);
             GL.Translate(Pos);
-        }
-    }
-}
+        }//end method
+    }//end class
+}//end namespace

@@ -21,22 +21,26 @@ namespace Labyrinth.OpenGLHelpers
         public TextureCache()
         {
             cachetbl = new Hashtable();
-        }
+        }//end constructor
 
         public void Dispose()
         {
             foreach (DictionaryEntry de in cachetbl)
             {
-                if (GL.IsTexture((int)de.Value)) GL.DeleteTexture((int)de.Value);
-            }
+                if (GL.IsTexture((int)de.Value))
+                    GL.DeleteTexture((int)de.Value);
+            }//end foreach
 
             cachetbl = null;
-        }
+        }//end method
 
         public int this[string Name]
         {
-            get { return (int)cachetbl[Name]; }
-        }
+            get 
+            { 
+                return (int)cachetbl[Name];
+            }//end get
+        }//end method
 
         public void Load(string Name, Bitmap Image)
         {
@@ -61,14 +65,12 @@ namespace Labyrinth.OpenGLHelpers
                     /* Finish things up */
                     Image.UnlockBits(bmpdata);
                     ms.Close();
-                }
-            }
+                }//end using
+            }//end if
 
             /* Check cache for texture, add if not already cached */
             if (!cachetbl.ContainsKey(Name))
-            {
                 cachetbl.Add(Name, glid);
-            }
-        }
-    }
-}
+        }//end method
+    }//end class
+}//end constructor

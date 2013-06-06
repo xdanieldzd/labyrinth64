@@ -42,7 +42,7 @@ namespace Labyrinth.OpenGLHelpers
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-        }
+        }//end method
 
         public static void SetViewport(int Width, int Height)
         {
@@ -59,6 +59,6 @@ namespace Labyrinth.OpenGLHelpers
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-        }
-    }
-}
+        }//end method
+    }//end class
+}//end namespace
