@@ -16,7 +16,7 @@ namespace Labyrinth.ModelImport
 
         public string errorMessage { get; set; }//end method
 
-        public bool getErrorStatus { get; set; }//end method
+        public bool didErrorOccur { get; set; }//end method
 
         bool groupopen, matopen;
         string mtlpath, mapka, mapkd;
@@ -35,13 +35,13 @@ namespace Labyrinth.ModelImport
             normals = new List<Common.Vector3>();
             texcoords = new List<Common.Vector2>();
             colors = new List<Common.Color4>();
-            getErrorStatus = false;
+            didErrorOccur = false;
         }//end constructor
 
         public WavefrontObj(string fn)
             : this()
         {
-            getErrorStatus = false;
+            didErrorOccur = false;
                 Open(fn);
         }//end constructor
 
@@ -205,7 +205,7 @@ namespace Labyrinth.ModelImport
             catch (Exception e)
             {
                 errorMessage = "Error opening WaveFontObj. Value " + fn + "\r\n" + "Error Message: " + e.Message;
-                getErrorStatus = true;
+                didErrorOccur = true;
             }//end catch
         }//end method
 
@@ -296,7 +296,7 @@ namespace Labyrinth.ModelImport
             catch (Exception e)
             {
                 errorMessage = "Error in OpenMtl. Value " + fn + "\r\n" + "Error Message: " + e.Message;
-                getErrorStatus = true;
+                didErrorOccur = true;
             }//end catch
         }//end method
 

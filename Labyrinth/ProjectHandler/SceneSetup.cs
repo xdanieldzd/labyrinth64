@@ -13,11 +13,11 @@ namespace Labyrinth.ProjectHandler
         public SceneSetup(Project p)
         {
             parent = p;
-        }
+        }//end constructor
 
         public void LoadCollisionModel(string fn)
         {
             Model = ProjectHelpers.OpenModelByExtension(fn);
-        }
-    }
-}
+        }//end method
+    }//end class
+}//end namespace
