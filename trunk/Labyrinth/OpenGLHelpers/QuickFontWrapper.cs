@@ -23,7 +23,7 @@ namespace Labyrinth.OpenGLHelpers
             qf.Options.CharacterSpacing = -0.1f;
             qf.Options.WordSpacing = 0.5f;
             qf.Options.LineSpacing = 1.2f;
-        }
+        }//end constructor
 
         public void Begin()
         {
@@ -31,7 +31,7 @@ namespace Labyrinth.OpenGLHelpers
             GL.PushAttrib(AttribMask.AllAttribBits);
             GL.Disable(EnableCap.Lighting);
             QuickFont.QFont.Begin();
-        }
+        }//end method
 
         public void Print(string str, Vector2d pos, Color4? col = null)
         {
@@ -40,12 +40,12 @@ namespace Labyrinth.OpenGLHelpers
             GL.Translate(new Vector3d(pos.X, pos.Y, 0.0));
             qf.Print(str);
             GL.PopMatrix();
-        }
+        }//end method
 
         public void End()
         {
             QuickFont.QFont.End();
             GL.PopAttrib();
-        }
-    }
-}
+        }//end method
+    }//end class
+}//end namespace

@@ -12,8 +12,8 @@ namespace Labyrinth.OpenGLHelpers
     /// </summary>
     public class FPSMonitor
     {
-        public float Value { get; private set; }
-        public TimeSpan Sample { get; set; }
+        public float Value { get; private set; }//end method
+        public TimeSpan Sample { get; set; }//end method
 
         Stopwatch sw;
         int frames;
@@ -24,7 +24,7 @@ namespace Labyrinth.OpenGLHelpers
             Value = 0;
             frames = 0;
             sw = Stopwatch.StartNew();
-        }
+        }//end constructor
 
         public void Update()
         {
@@ -37,7 +37,7 @@ namespace Labyrinth.OpenGLHelpers
                 sw.Reset();
                 sw.Start();
                 frames = 0;
-            }
-        }
-    }
-}
+            }//end if
+        }//end method
+    }//end class
+}//end namespace

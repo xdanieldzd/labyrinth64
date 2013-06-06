@@ -7,6 +7,6 @@ namespace Labyrinth.ModelImport
 {
     interface I3DModel
     {
-        Common.Model Model { get; set; }
-    }
-}
+        Common.Model Model { get; set; } //end method
+    }//end interface
+}//end namespace
