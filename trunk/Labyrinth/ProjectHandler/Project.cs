@@ -12,6 +12,6 @@ namespace Labyrinth.ProjectHandler
         public Project()
         {
             //
-        }
-    }
-}
+        }//end constructor
+    }//end class
+}//end namespace
