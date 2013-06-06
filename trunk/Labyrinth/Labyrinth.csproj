@@ -78,6 +78,9 @@
     <Compile Include="OpenGLHelpers\QuickFontWrapper.cs" />
     <Compile Include="OpenGLHelpers\TextureCache.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectHandler\Project.cs" />
+    <Compile Include="ProjectHandler\ProjectHelpers.cs" />
+    <Compile Include="ProjectHandler\SceneSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

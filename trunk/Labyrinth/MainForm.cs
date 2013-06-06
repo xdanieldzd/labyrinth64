@@ -28,7 +28,7 @@ namespace Labyrinth
 
         //TEMPORARY for testing
         int fragprog;
-        ModelImport.WavefrontObj obj;
+        ModelImport.I3DModel obj;
 
         public MainForm()
         {
@@ -51,8 +51,8 @@ namespace Labyrinth
         {
             //ALL TEMPORARY until more classes and GUI is working
             //obj = new WavefrontObj(@"C:\Users\haddocdx\Downloads\Death_Mountain_2.obj");
-            //obj = new WavefrontObj(@"E:\oot-obj\crash_maps\water\water.obj");
-            obj = new WavefrontObj(@"C:\Users\Daniel\OoT Obj Testing\plane_grouped_modified-VTXHACK.obj");
+            //obj = ProjectHandler.ProjectHelpers.OpenModelByExtension(@"E:\oot-obj\crash_maps\water\water.obj");
+            obj = ProjectHandler.ProjectHelpers.OpenModelByExtension(@"C:\Users\Daniel\OoT Obj Testing\plane_grouped_modified-VTXHACK.obj");
             foreach (Common.Material mat in obj.Model.Materials) TexCache.Load(System.IO.Path.GetFileName(mat.TextureMap), mat.TextureMapImage);
 
             // shader test
