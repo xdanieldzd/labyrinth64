@@ -33,7 +33,6 @@ namespace Labyrinth.OpenGLHelpers
             if (sw.Elapsed > Sample)
             {
                 Value = (float)(frames / sw.Elapsed.TotalSeconds);
-
                 sw.Reset();
                 sw.Start();
                 frames = 0;

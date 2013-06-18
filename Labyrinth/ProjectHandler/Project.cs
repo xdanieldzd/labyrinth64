@@ -7,7 +7,7 @@ namespace Labyrinth.ProjectHandler
 {
     class Project
     {
-        public List<SceneSetup> Scenes { get; set; }
+        public List<SceneSetup> Scenes { get; set; }//end method
 
         public Project()
         {

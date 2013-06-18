@@ -20,9 +20,7 @@ namespace Labyrinth
         public void createform()
         {
             this.ShowDialog();
-
         }//end method
-
 
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

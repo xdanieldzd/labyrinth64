@@ -12,8 +12,8 @@ namespace Labyrinth.ModelImport
         {
             public static Vector2 Zero = new Vector2(0.0, 0.0);
 
-            public double X { get; set; }
-            public double Y { get; set; }
+            public double X { get; set; }//end method
+            public double Y { get; set; }//end method
 
             public Vector2()
             {

@@ -50,10 +50,10 @@ namespace Labyrinth
         private void MainForm_Load(object sender, EventArgs e)
         {
             //ALL TEMPORARY until more classes and GUI is working
-            //obj = new WavefrontObj(@"C:\Users\haddocdx\Downloads\Death_Mountain_2.obj");
             //obj = ProjectHandler.ProjectHelpers.OpenModelByExtension(@"E:\oot-obj\crash_maps\water\water.obj");
             obj = ProjectHandler.ProjectHelpers.OpenModelByExtension(@"C:\Users\Daniel\OoT Obj Testing\plane_grouped_modified-VTXHACK.obj");
-            foreach (Common.Material mat in obj.Model.Materials) TexCache.Load(System.IO.Path.GetFileName(mat.TextureMap), mat.TextureMapImage);
+            foreach (Common.Material mat in obj.Model.Materials) 
+                TexCache.Load(System.IO.Path.GetFileName(mat.TextureMap), mat.TextureMapImage);
 
             // shader test
             string pstring =
@@ -104,7 +104,8 @@ namespace Labyrinth
 
         private void glControl1_Paint(object sender, PaintEventArgs e)
         {
-            if (!GLReady) return;
+            if (!GLReady) 
+                return;
 
             RenderInit(((GLControl)sender).Width, ((GLControl)sender).Height);
             RenderScene();
