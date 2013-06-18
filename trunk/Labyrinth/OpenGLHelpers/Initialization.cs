@@ -46,7 +46,8 @@ namespace Labyrinth.OpenGLHelpers
 
         public static void SetViewport(int Width, int Height)
         {
-            if (Width == 0 || Height == 0) return;
+            if (Width == 0 || Height == 0) 
+                return;
 
             GL.Viewport(0, 0, Width, Height);
 

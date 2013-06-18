@@ -12,7 +12,7 @@ namespace Labyrinth.ModelImport
         static char[] TokenValSeperator = { '/' };
         static List<string> ValidImageTypes = new List<string>(new string[] { ".bmp", ".gif", ".jpg", ".jpeg", ".png", ".tiff", ".tif" });
 
-        public Common.Model Model { get; set; }
+        public Common.Model Model { get; set; }//end method
 
         public string errorMessage { get; set; }//end method
 
@@ -295,7 +295,7 @@ namespace Labyrinth.ModelImport
             }//end try
             catch (Exception e)
             {
-                errorMessage = "Error in OpenMtl. Value " + fn + "\r\n" + "Error Message: " + e.Message;
+                errorMessage = "Error in OpenMtl: Value " + fn + "\r\n" + "Error Message: " + e.Message;
                 didErrorOccur = true;
             }//end catch
         }//end method
@@ -303,7 +303,8 @@ namespace Labyrinth.ModelImport
         private string CreateFullPath(string p1, string p2)
         {
             string path = p2;
-            if (!Path.IsPathRooted(path)) path = Path.Combine(Path.GetDirectoryName(p1), path);
+            if (!Path.IsPathRooted(path)) 
+                path = Path.Combine(Path.GetDirectoryName(p1), path);
             return Path.GetFullPath(path);
         }//end method
 
@@ -334,7 +335,6 @@ namespace Labyrinth.ModelImport
                     mat.Color = ka;
                 else if (kd != Common.Color4.Zero)   /* Diffuse color is set but no texture map, use diffuse color */
                     mat.Color = kd;
-
 
                 if (tr != 0.0)   /* Transparency is set to something other than 0, use transparency */
                     mat.Color.A = tr;

@@ -85,8 +85,10 @@ namespace Labyrinth.OpenGLHelpers
             double RotXRad = (Rot.X / 180.0 * Math.PI);
 
             double Modifier = 2.0;
-            if (KeysDown[(char)Keys.Space]) Modifier = 10.0;
-            else if (KeysDown[(char)Keys.ShiftKey]) Modifier = 0.5;
+            if (KeysDown[(char)Keys.Space]) 
+                Modifier = 10.0;
+            else if (KeysDown[(char)Keys.ShiftKey]) 
+                Modifier = 0.5;
 
             if (KeysDown[(char)Keys.W])
             {
